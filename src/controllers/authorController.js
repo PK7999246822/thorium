@@ -8,7 +8,7 @@ try{
         if(Object.keys(author).length ===0){
             return res.status(400).send({status:false, msg: "Please provide proper author details."})
         }
-        let email = author.email;
+        let email = author.email; //mongoose-type email..use in authorSchema
         if((validator.validate(email)== false)){
             return res.status(400).send({status:false, msg: "Please input a valid email"})
         }

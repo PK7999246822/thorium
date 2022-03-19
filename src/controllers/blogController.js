@@ -11,14 +11,17 @@ const createBlog = async function (req, res) {
     }
     let authorCheck = await AuthorModel.findOne({ _id: { $eq: id } });
 
-    if (authorCheck === null) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Author do not exist." });
-    } else {
-      let blogCreated = await BlogModel.create(blog);
-      res.status(201).send({ status: true, data: blogCreated });
-    }
+      if (authorCheck === null) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Author do not exist." });
+      }
+    let blogCreated = await BlogModel.create(blog);
+    if(blogCreated.isPublished==true){
+      let blogUpdated = await BlogModel.findOneAndUpdate({_id:blogCreated._id},{publishedAt: Date.now()},{new:true})
+      return res.status(201).send({status: true, data:blogUpdated})
+     }
+    return res.status(201).send({ status: true, data: blogCreated });
   } catch (error) {
     return res.status(500).send({ msg: "Error", error: error.message });
   }
@@ -254,7 +257,7 @@ const deleteCategory = async function (req, res) {
       let tags = filter.tags;
       delete filter.tags;
       let blogs = await BlogModel.updateMany(
-        { $and: [{ tags: { $in: [tags] } }, filter] },
+        { $and: [{ tags: { $in: [tags] } }, filter,{isDeleted:false}] },
         { $set: { isDeleted: true, deletedAt: Date.now() } },
         { new: true }
       );
@@ -267,7 +270,7 @@ const deleteCategory = async function (req, res) {
       let subCat = filter.subcategory;
       delete filter.subcategory;
       let blogs = await BlogModel.updateMany(
-        { $and: [{ subcategory: { $in: [subCat] } }, filter] },
+        { $and: [{ subcategory: { $in: [subCat] } }, filter,{isDeleted:false}] },
         { $set: { isDeleted: true, deletedAt: Date.now() } },
         { new: true }
       );
@@ -286,7 +289,7 @@ const deleteCategory = async function (req, res) {
           $and: [
             { tags: { $in: [tags] } },
             { subcategory: { $in: [subCat] } },
-            filter,
+            filter,{isDeleted:false}
           ],
         },
         { $set: { isDeleted: true, deletedAt: Date.now() } },

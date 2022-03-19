@@ -6,7 +6,7 @@ const authenticate = function (req,res,next){
         if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
         let decodedToken = jwt.verify(token, "iamtheowner");
-        if (!decodedToken) return res.status(400).send({ status: false, msg: "token is invalid" });
+        if (!decodedToken) return res.status(403).send({ status: false, msg: "token is invalid" });
         
         next();
     }catch(error){
