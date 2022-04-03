@@ -23,7 +23,7 @@ const createUser = async (req, res) => {
         }
 
         //Checking if user has entered these mandatory fields or not
-        const { title, name, mobile, email, password} = data
+        const { title, name, phone, email, password} = data
 
         if (!isValid(title)) {
              return res.status(400).send({ status: false, message: "Title is required" })
@@ -37,23 +37,22 @@ const createUser = async (req, res) => {
             return res.status(400).send({ status: false, message: "Name is required" }) 
         }
 
-        if (!isValid(mobile)) { 
-            return res.status(400).send({ status: false, message: "Mobile is required" })
+        if (!isValid(phone)) { 
+            return res.status(400).send({ status: false, message: "phone is required" })
          }
 
-        //Checking if user entered a valid mobile or not
-        let Mobile = data.mobile
-        let validateMobile = function (Mobile) {
-            return /^([+]\d{2})?\d{10}$/.test(Mobile)
+        //Checking if user entered a valid phone or not
+        let validatephone = function (phone) {
+            return /^([+]\d{2})?\d{10}$/.test(phone)
         }
-        if (!validateMobile(Mobile)){
-        return res.status(400).send({status: false , message: "Please enter a valid mobile"})
+        if (!validatephone(phone)){
+        return res.status(400).send({status: false , message: "Please enter a valid phone"})
         }
 
-         //Checking if mobile is unique or not
-        let uniqueMobile = await UserModel.findOne({mobile : data.mobile})
-        if (uniqueMobile) {
-           return res.status(400).send({status: false , message: "Mobile already exists"})
+         //Checking if phone is unique or not
+        let uniquephone = await UserModel.findOne({phone : data.phone})
+        if (uniquephone) {
+           return res.status(400).send({status: false , message: "phone already exists"})
         }
 
          if (!isValid(email)) {

@@ -29,7 +29,7 @@ const createReview = async (req , res) => {
         return res.status(400).send({ status: false, message: "Please provide some data to create a review" })
         }
         
-        const { bookId , reviewedBy , rating } = data
+        const { bookId , reviewedBy , rating } = data //object distructuring
 
         if (!isValid(bookId)) {
             data['bookId'] = book_Id
