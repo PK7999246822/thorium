@@ -46,6 +46,11 @@ const bookSchema = new mongoose.Schema({
             type: Boolean, 
             default: false
         },
+
+        bookCover:{
+            type:String,
+            Required:true
+        },
         releasedAt: {
             type: Date,   // format("YYYY-MM-DD")
             required: "releasedAt is required", 
